@@ -1,5 +1,12 @@
 # Changelog
 
+## v2026.06.12-alpha
+
+- **new** Zmodem file transfer (rz/sz). Upload (including drag-and-drop onto terminal) and download files in SSH terminals via `rz -be` and `sz`, with real-time progress bars.
+- **new** SSH panel header "..." dropdown menu and tab right-click menu now include Duplicate Session, Connect SFTP, Server Monitor, and Text Search.
+- **improve** Refactored terminal instance management so xterm instances are reused across workspace panel and standalone tab drag-and-drop merge/detach, eliminating garbled text during transitions.
+- **bugfix** Fixed double-click text selection not copying to clipboard. Replaced mousedown/mouseup tracking with xterm's native onSelectionChange event.
+
 ## v2026.06.10-alpha
 
 - **new** AI model list sync. One-click fetch available models from the server in the model edit dialog, with autocomplete suggestions in the model input.

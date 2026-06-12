@@ -42,7 +42,7 @@ Autonomous AI Agent that works like Claude Code — independently plans and exec
 
 Local terminal, SSH / Telnet / Mosh, SFTP, server monitor, RDP / VNC / SPICE, database — covering all remote access needs.
 
-- **SSH / Telnet / Mosh** — Connect via password or private key authentication. Supports SSH, Telnet, and Mosh (low-latency mobile connections). Multi-tab management with 5 color schemes, 6 monospace fonts, adjustable font size and scrollback, configurable selection behavior and right-click actions.
+- **SSH / Telnet / Mosh** — Connect via password or private key authentication. Supports SSH, Telnet, and Mosh (low-latency mobile connections). Built-in zmodem file transfer (`rz -be`/`sz`, drag-and-drop upload). Multi-tab management with 5 color schemes, 6 monospace fonts, adjustable font size and scrollback, configurable selection behavior and right-click actions.
 - **SFTP File Manager** — Dual-pane browser for local and remote files. Upload, download, drag-and-drop, delete, rename, and more. Transfers tracked per tab with pause, resume, and cancel support.
 - **Server Monitor** — Real-time monitoring for connected servers. View performance metrics (CPU, memory, disk, network), process list with detail panel, listening ports, disk usage with mountpoint info, and network interfaces with bond/bridge detection.
 - **Local Terminal** — Full-featured local terminal supporting PowerShell, CMD, Git Bash, and other shells with the same font, color, and behavior settings as SSH sessions.
