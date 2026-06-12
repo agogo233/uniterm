@@ -36,6 +36,8 @@ export function ExecuteQuery(arg1:string,arg2:string,arg3:string):Promise<databa
 
 export function ExecuteStatement(arg1:string,arg2:string,arg3:string):Promise<database.ExecResult>;
 
+export function FetchModels(arg1:string,arg2:string):Promise<Array<main.ModelInfo>>;
+
 export function FrontendLog(arg1:string,arg2:string):Promise<void>;
 
 export function GetAppInfo():Promise<main.AppInfo>;
