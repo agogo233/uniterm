@@ -8,6 +8,64 @@ export interface ExecuteResult {
   exitCode: number
 }
 
+export interface WatchResult {
+  output: string
+  timedOut: boolean
+}
+
+export function watchOutput(
+  sessionId: string,
+  marker: string,
+  timeoutMs: number
+): { promise: Promise<WatchResult>; cleanup: () => void } {
+  let timeoutId: ReturnType<typeof setTimeout>
+  let unsubscribe: (() => void) | null = null
+  let resolved = false
+  let output = ''
+  let lastScanPos = 0
+  let markerSeen = false
+
+  const cleanup = () => {
+    clearTimeout(timeoutId)
+    unsubscribe?.()
+    resolved = true
+  }
+
+  const promise = new Promise<WatchResult>((resolve) => {
+    unsubscribe = EventsOn('session:data', (payload: { id: string; data: string }) => {
+      if (payload.id !== sessionId || resolved) return
+
+      output += payload.data
+      const clean = stripAnsi(output)
+
+      const scanStart = Math.max(0, lastScanPos - marker.length)
+      lastScanPos = clean.length
+      let searchIdx = scanStart
+      while ((searchIdx = clean.indexOf(marker, searchIdx)) !== -1) {
+        searchIdx += marker.length
+        if (!markerSeen) {
+          markerSeen = true
+          continue
+        }
+        cleanup()
+        const result = clean.slice(0, searchIdx - marker.length).trim()
+        resolve({ output: result, timedOut: false })
+        return
+      }
+    })
+
+    timeoutId = setTimeout(() => {
+      cleanup()
+      resolve({
+        output: stripAnsi(output).trim(),
+        timedOut: true,
+      })
+    }, timeoutMs)
+  })
+
+  return { promise, cleanup }
+}
+
 export async function executeCommand(command: string): Promise<ExecuteResult> {
   const tabStore = useTabStore()
   const panelStore = usePanelStore()
