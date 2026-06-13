@@ -83,12 +83,7 @@ export function truncateOutput(
   return `${head}\n\n─────── [截断: 共 ${total} 行, 已省略 ${omitted} 行] ────────\n调整 head_lines / tail_lines 参数可查看更多内容。\n\n${tail}`
 }
 
-export async function executeCommand(
-  command: string,
-  timeoutMs: number = 60000,
-  headLines: number = 50,
-  tailLines: number = 150
-): Promise<ExecuteResult> {
+function resolveActiveSession(): { sessionId: string; shellPath?: string } {
   const tabStore = useTabStore()
   const panelStore = usePanelStore()
 
@@ -108,22 +103,32 @@ export async function executeCommand(
     throw new Error('No active terminal session')
   }
 
-  const sessionId = panel.sessionId
-  const marker = `__AI_DONE_${Date.now()}_${Math.random().toString(36).slice(2, 8)}__`
-  const shellPath = panel.config?.shellPath
-  const fullCommand = buildCommand(command, marker, shellPath)
+  return { sessionId: panel.sessionId, shellPath: panel.config?.shellPath }
+}
 
+function getShellNewline(shellPath?: string): string {
   const lowerShell = (shellPath || '').toLowerCase()
-  let newline: string
   if (lowerShell.includes('powershell') || lowerShell.includes('pwsh')) {
-    newline = '\r'
+    return '\r'
   } else if (lowerShell.includes('cmd')) {
-    newline = '\r\n'
+    return '\r\n'
   } else if (lowerShell.includes('bash') || lowerShell.includes('sh')) {
-    newline = '\r\n'
+    return '\r\n'
   } else {
-    newline = '\n'
+    return '\n'
   }
+}
+
+export async function executeCommand(
+  command: string,
+  timeoutMs: number = 60000,
+  headLines: number = 50,
+  tailLines: number = 150
+): Promise<ExecuteResult> {
+  const { sessionId, shellPath } = resolveActiveSession()
+  const marker = `__AI_DONE_${Date.now()}_${Math.random().toString(36).slice(2, 8)}__`
+  const fullCommand = buildCommand(command, marker, shellPath)
+  const newline = getShellNewline(shellPath)
 
   await SessionWrite(sessionId, fullCommand + newline)
 
@@ -158,39 +163,8 @@ export interface StartResult {
 }
 
 export async function startCommand(command: string): Promise<StartResult> {
-  const tabStore = useTabStore()
-  const panelStore = usePanelStore()
-
-  const lockedPanelId = tabStore.getAILockedPanel()
-  let panel = lockedPanelId ? panelStore.getPanel(lockedPanelId) : null
-
-  if (!panel) {
-    const activeTab = tabStore.activeTab
-    if (activeTab?.type === 'terminal' || activeTab?.type === 'settings') {
-      panel = panelStore.getPanel(activeTab.panelId)
-    } else if (activeTab?.type === 'workspace' && activeTab.activePanelId) {
-      panel = panelStore.getPanel(activeTab.activePanelId)
-    }
-  }
-
-  if (!panel || !panel.sessionId) {
-    throw new Error('No active terminal session')
-  }
-
-  const sessionId = panel.sessionId
-  const shellPath = panel.config?.shellPath
-
-  const lowerShell = (shellPath || '').toLowerCase()
-  let newline: string
-  if (lowerShell.includes('powershell') || lowerShell.includes('pwsh')) {
-    newline = '\r'
-  } else if (lowerShell.includes('cmd')) {
-    newline = '\r\n'
-  } else if (lowerShell.includes('bash') || lowerShell.includes('sh')) {
-    newline = '\r\n'
-  } else {
-    newline = '\n'
-  }
+  const { sessionId, shellPath } = resolveActiveSession()
+  const newline = getShellNewline(shellPath)
 
   await SessionWrite(sessionId, command + newline)
 
