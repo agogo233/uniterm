@@ -152,7 +152,7 @@ export const AVAILABLE_TOOLS = [
       properties: {
         tail_lines: {
           type: 'number',
-          description: 'Lines from the bottom of the buffer. Default 50. Increase to see more of the recent output.'
+          description: 'Lines from the bottom of the buffer. Default 200. Increase to see more of the recent output.'
         }
       }
     }

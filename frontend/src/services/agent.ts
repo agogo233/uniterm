@@ -397,7 +397,7 @@ export async function runAgent(userInput: string) {
         })
       }
     } else if (tu.name === 'capture_terminal') {
-      const tailLines = (tu.input.tail_lines as number) ?? 50
+      const tailLines = (tu.input.tail_lines as number) ?? 200
       try {
         const result = captureTerminal(tailLines)
         store.addMessage({

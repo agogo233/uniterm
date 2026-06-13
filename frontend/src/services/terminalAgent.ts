@@ -191,7 +191,7 @@ export interface CaptureResult {
   output: string
 }
 
-export function captureTerminal(tailLines: number = 50): CaptureResult {
+export function captureTerminal(tailLines: number = 200): CaptureResult {
   const { sessionId } = resolveActiveSession()
 
   const managed = getManagedTerminal(sessionId)
