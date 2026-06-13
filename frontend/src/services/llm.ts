@@ -101,7 +101,7 @@ export async function chat(options: ChatOptions): Promise<void> {
 export const AVAILABLE_TOOLS = [
   {
     name: 'execute_command',
-    description: 'Execute a shell command in the active terminal session and return its output. You MUST classify every command with a risk level.',
+    description: 'Execute a shell command in the active terminal session and return its output. You MUST classify every command with a risk level. Use "timeout" to control how long to wait — short commands need less time, long tasks (builds, installs) need more.',
     input_schema: {
       type: 'object',
       properties: {
@@ -113,9 +113,99 @@ export const AVAILABLE_TOOLS = [
           type: 'string',
           enum: ['read', 'write', 'dangerous'],
           description: 'The risk level of this command:\n- "read": only inspects/views data, absolutely no modifications (e.g. ls, cat, grep, head, tail, df, du, ps, top, find, pwd, whoami, git status, git log, docker ps, npm list)\n- "write": modifies or creates data but not system-destructive (e.g. echo > file, touch, mkdir, cp, mv, git commit, curl POST, npm install, pip install)\n- "dangerous": potentially destructive or system-altering (e.g. rm, > overwrite, chmod, chown, shutdown, mkfs, dd, reboot, force push)'
+        },
+        timeout: {
+          type: 'number',
+          description: 'Maximum seconds to wait for command completion. Default 60s. Use 5-10s for quick commands (ls, cat, pwd), 30-60s for moderate tasks, 120-300s for long tasks (npm install, docker build, git clone). NEVER set below 5s.'
+        },
+        head_lines: {
+          type: 'number',
+          description: 'Number of lines to keep from the START of output when truncation occurs. Default 50. Increase to see more of the beginning.'
+        },
+        tail_lines: {
+          type: 'number',
+          description: 'Number of lines to keep from the END of output when truncation occurs. Default 150. Increase to see more recent output (errors usually at the end).'
         }
       },
       required: ['command', 'risk']
+    }
+  },
+  {
+    name: 'start_command',
+    description: 'Start a background/long-running command and return its initial output (first 3 seconds). Use this for servers (npm run dev, redis-server, python -m http.server) or any command you do NOT want to wait for.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        command: {
+          type: 'string',
+          description: 'The shell command to start. It will keep running after this tool returns.'
+        }
+      },
+      required: ['command']
+    }
+  },
+  {
+    name: 'capture_terminal',
+    description: 'Take an instant snapshot of the terminal screen. Use this to check what is currently visible without running any command. Useful after a command times out or returns, to see if the shell prompt is back or to read error messages on screen.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        head_lines: {
+          type: 'number',
+          description: 'Lines from the top of the buffer. Default 0.'
+        },
+        tail_lines: {
+          type: 'number',
+          description: 'Lines from the bottom of the buffer. Default 50. Increase to see more of the recent output.'
+        }
+      }
+    }
+  },
+  {
+    name: 'collect_output',
+    description: 'Wait and collect terminal output WITHOUT sending any command or text to the terminal. Pure passive listening. Use this when a command is still running and you want to wait for more output. You can call this repeatedly to wait in stages.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        timeout: {
+          type: 'number',
+          description: 'Seconds to wait. Default 30s. Use 15-30s for active progress checks, 60-120s for slower operations.'
+        },
+        head_lines: {
+          type: 'number',
+          description: 'Head lines to keep on truncation. Default 50.'
+        },
+        tail_lines: {
+          type: 'number',
+          description: 'Tail lines to keep on truncation. Default 150.'
+        }
+      }
+    }
+  },
+  {
+    name: 'send_terminal_key',
+    description: 'Send text or a control character to the active terminal. Use this ONLY when you can SEE an interactive prompt in the output (password request, y/n confirmation, etc.). NEVER guess that a prompt is there.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        input: {
+          type: 'string',
+          description: 'Text to send to the terminal (e.g., a password, "y" for confirmation, or a command fragment).'
+        },
+        control: {
+          type: 'string',
+          enum: ['ctrl_c', 'ctrl_d', 'enter'],
+          description: 'Send a control character instead of text. "ctrl_c" interrupts/cancels the running command. "ctrl_d" sends EOF. "enter" sends a newline/Enter key.'
+        }
+      }
+    }
+  },
+  {
+    name: 'interrupt_command',
+    description: 'Send Ctrl+C to cancel the currently running command. Use this when a command is stuck, hanging, or needs to be stopped before running a different command.',
+    input_schema: {
+      type: 'object',
+      properties: {}
     }
   }
 ]
