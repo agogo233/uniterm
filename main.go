@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"runtime/debug"
 
 	"github.com/wailsapp/wails/v2"
@@ -45,7 +46,7 @@ func main() {
 		Title:  "uniTerm",
 		Width:  1200,
 		Height:    800,
-		Frameless: true,
+		Frameless: runtime.GOOS != "darwin",
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
