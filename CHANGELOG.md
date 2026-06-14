@@ -1,5 +1,23 @@
 # Changelog
 
+## v2026.06.14-alpha
+
+- **new** SSH tunnel (local port forwarding). Any connection can use an existing SSH connection as a jump host. Auto-assigns local port, tunnels TCP through SSH. VNC/SPICE ports automatically adjusted for libvirt display numbers.
+- **new** FTP/FTPS file transfer. New File Transfer category with FTP and FTPS (explicit TLS), passive/active mode, configurable character encoding. Reuses the SFTP two-pane file manager UI; Go backend uses shared fileTransferSession interface.
+- **new** SFTP max concurrent transfers (per SSH connection, default 5). Semaphore-based concurrency control prevents bandwidth saturation and server MaxSessions limits.
+- **new** Connection form now has four categories: Terminal / File Transfer / Remote Desktop / Database. SSH labeled as SSH (SFTP), appears under both Terminal and File Transfer.
+- **improve** All notifications now have a close button and auto-dismiss after 5 seconds. Unified via `services/message.ts` wrapper.
+- **improve** KeepAlive cache extended to all tab components (Settings/SFTP/RDP/VNC/SPICE). Switching tabs no longer rebuilds components.
+- **improve** Fonts switched to system native font stack, removing Google Fonts CDN dependency. UI uses system interface fonts, monospace uses system-provided fixed-width fonts. CJK fallback covers Windows/macOS/Linux.
+- **bugfix** Fixed KeepAlive-cached SFTP instances picking up global drag events, causing files to upload to the wrong connection. Document event listeners now managed via onActivated/onDeactivated.
+- **bugfix** Fixed stale edit data leaking into the quick-new-connection form.
+- **bugfix** Fixed duplicate task IDs from identical nanosecond timestamps in concurrent transfers causing jumbled progress bars. Switched to atomic counter.
+- **bugfix** Fixed port input min=1 preventing value 0.
+- **bugfix** Fixed 4px body padding preventing the titlebar from being flush with the window edge.
+- **bugfix** Fixed 4px gap between local terminal submenu and its trigger causing submenu to close on mouse enter.
+- **bugfix** Fixed AI confirmation level dropdown button missing ChevronDown icon import.
+- **bugfix** Fixed default port not updating when switching between remote desktop types (e.g. RDP 3389 → VNC still showing 3389).
+
 ## v2026.06.13-alpha.1
 
 - **new** Update checker. Manual check + auto-check for GitHub Releases. Settings About page shows current version, notification on new release with view details link.

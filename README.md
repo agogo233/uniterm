@@ -40,14 +40,14 @@ Autonomous AI Agent that works like Claude Code — independently plans and exec
 
 ### Full-Featured Terminal
 
-Local terminal, SSH / Telnet / Mosh, SFTP, server monitor, RDP / VNC / SPICE, database — covering all remote access needs.
+Local terminal, SSH / Telnet / Mosh, file transfer (SFTP / FTP), RDP / VNC / SPICE, database, SSH tunnel, server monitor — covering all remote access needs.
 
-- **SSH / Telnet / Mosh** — Connect via password or private key authentication. Supports SSH, Telnet, and Mosh (low-latency mobile connections). Built-in zmodem file transfer (`rz -be`/`sz`, drag-and-drop upload). Multi-tab management with 5 color schemes, 6 monospace fonts, adjustable font size and scrollback, configurable selection behavior and right-click actions.
-- **SFTP File Manager** — Dual-pane browser for local and remote files. Upload, download, drag-and-drop, delete, rename, and more. Transfers tracked per tab with pause, resume, and cancel support.
-- **Server Monitor** — Real-time monitoring for connected servers. View performance metrics (CPU, memory, disk, network), process list with detail panel, listening ports, disk usage with mountpoint info, and network interfaces with bond/bridge detection.
-- **Local Terminal** — Full-featured local terminal supporting PowerShell, CMD, Git Bash, and other shells with the same font, color, and behavior settings as SSH sessions.
+- **SSH / Telnet / Mosh / Local Terminal** — Connect via password or private key authentication. Supports SSH, Telnet, and Mosh (low-latency mobile connections). Built-in zmodem file transfer (`rz -be`/`sz`, drag-and-drop upload). Also supports local terminals (PowerShell, CMD, Git Bash) with the same font, color, and behavior settings as SSH sessions.
+- **File Transfer (SFTP / FTP)** — Dual-pane browser for local and remote files. Supports SFTP (over SSH) and FTP/FTPS (explicit TLS) with configurable passive/active mode and character encoding. Upload, download, drag-and-drop, delete, rename, and more. Transfers tracked per tab with pause, resume, and cancel. SFTP supports max concurrent transfer limit.
 - **RDP / VNC / SPICE** — Support Windows Remote Desktop, VNC, and SPICE connections.
 - **Database Client** — Connect to MySQL, PostgreSQL, and rqlite databases. Execute SQL queries, browse table structures, and edit data rows inline — all from a unified interface.
+- **SSH Tunnel (Port Forwarding)** — Any connection can use an existing SSH connection as a jump host. Auto-assigns local port, tunnels TCP through SSH to the target. Supports all TCP protocol connection types.
+- **Server Monitor** — Real-time monitoring for connected servers. View performance metrics (CPU, memory, disk, network), process list with detail panel, listening ports, disk usage with mountpoint info, and network interfaces with bond/bridge detection.
 
 ### Customization
 

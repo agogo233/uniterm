@@ -1,5 +1,23 @@
 # 更新日志
 
+## v2026.06.14-alpha
+
+- **new** SSH 隧道（本地端口转发）。任何连接可选择已有 SSH 连接作为跳板，自动分配本地端口，通过隧道访问目标。VNC/SPICE 自动处理 libvirt 端口偏移。
+- **new** FTP/FTPS 文件传输。新增文件传输大类，支持 FTP 和 FTPS（显式 TLS），被动/主动模式、字符编码可选。复用 SFTP 两栏文件管理器 UI，Go 后端统一 fileTransferSession 接口。
+- **new** SFTP 最大并发传输数配置（SSH 连接设置，默认 5），semaphore 控制同时传输文件数，避免带宽打满或触发服务器 MaxSessions 限制。
+- **new** 连接表单分类调整为四类：终端 / 文件传输 / 远程桌面 / 数据库。SSH 标注为 SSH (SFTP)，同时出现在终端和文件传输下。
+- **improve** 所有通知消息增加关闭按钮，5 秒自动消失。统一 `services/message.ts` 包装器。
+- **improve** KeepAlive 缓存扩展至全部标签页组件（Settings/SFTP/RDP/VNC/SPICE），切标签不再重建组件。
+- **improve** 字体改为系统原生字体栈，移除 Google Fonts CDN 依赖。UI 用系统界面字体，等宽用系统自带等宽字体，中文 fallback 覆盖 Windows/macOS/Linux。
+- **bugfix** 修复 KeepAlive 下 SFTP 缓存实例监听全局拖拽事件导致文件误上传至其他连接的 bug。改由 onActivated/onDeactivated 管理事件。
+- **bugfix** 修复快速新建连接时上次编辑的残留数据泄漏到新表单的问题。
+- **bugfix** 修复并发传输时同一纳秒时间戳导致任务 ID 重复、进度条混乱的 bug。改用原子计数器。
+- **bugfix** 修复连接端口 min 限制为 1 导致无法输入 0 的问题。
+- **bugfix** 修复 body 4px padding 导致标题栏不贴顶的问题。
+- **bugfix** 修复"本地终端"子菜单与主菜单之间 4px 缝隙导致鼠标划入子菜单消失的问题。
+- **bugfix** 修复 AI 确认级别下拉按钮缺少 ChevronDown 图标 import 的问题。
+- **bugfix** 修复切换连接类型时远程桌面类型间不更新默认端口的问题（如 RDP 3389 切到 VNC 仍为 3389）。
+
 ## v2026.06.13-alpha.1
 
 - **new** 更新检查。设置关于页支持手动检查 + 后台自动检查 GitHub Releases，发现新版本弹出通知并可直接跳转查看详情。
