@@ -84,6 +84,17 @@ export const useSessionStore = defineStore('session', () => {
     return raw
   }
 
+  function getChunkCount(id: string): number {
+    const s = sessionState.sessions.get(id)
+    return s ? s.data.length : 0
+  }
+
+  function getDataFromChunk(id: string, startChunk: number): string {
+    const s = sessionState.sessions.get(id)
+    if (!s || startChunk >= s.data.length) return ''
+    return s.data.slice(startChunk).join('')
+  }
+
   function removeSession(id: string) {
     sessionState.sessions.delete(id)
   }
@@ -94,6 +105,8 @@ export const useSessionStore = defineStore('session', () => {
     updateStatus,
     appendData,
     getData,
+    getChunkCount,
+    getDataFromChunk,
     removeSession
   }
 })

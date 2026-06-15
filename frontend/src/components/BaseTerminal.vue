@@ -144,9 +144,9 @@ let onDataDispose: { dispose(): void } | null = null
 let keyHandlerDispose: { dispose(): void } | null = null
 let resizeObserver: ResizeObserver | null = null
 let intersectionObserver: IntersectionObserver | null = null
-// Track how many bytes of sessionStore data have been written to the terminal
+// Track how many sessionStore chunks have been written to the terminal
 // so we can replay only missed data on KeepAlive reactivation.
-let writtenLen = 0
+let writtenChunks = 0
 let unsubscribe: (() => void) | null = null
 let statusUnsubscribe: (() => void) | null = null
 let onDocumentMouseDown: ((e: MouseEvent) => void) | null = null
@@ -582,11 +582,8 @@ onMounted(() => {
         const hlOn = settingsStore.settings.terminal.highlightEnabled ?? true
         terminal.write(hlOn ? highlight(history) : history)
       }
-      // Sync writtenLen so onActivated replay only fills the gap after
-      // the initial restore. Use raw length because session:data handler
-      // writes raw chunks; sanitizeTerminalHistory strips garbage that
-      // we don't want to replay later either.
-      writtenLen = raw.length
+      // Sync writtenChunks so onActivated replay only fills the gap.
+      writtenChunks = sessionStore.getChunkCount(sid)
     }
     // Force initial resize with retries — needed because cell dimensions
     // may not be available immediately, and for reused terminals the cols/rows
@@ -841,7 +838,7 @@ onMounted(() => {
       if (cleaned) {
         terminal.write(cleaned)
       }
-      writtenLen += data.length
+      writtenChunks++
     } else {
       // Extract history commands from SSH output
       if (props.mode === 'ssh' && terminalInput) {
@@ -853,7 +850,7 @@ onMounted(() => {
       }
       const hlOn = settingsStore.settings.terminal.highlightEnabled ?? true
       terminal.write(hlOn ? highlight(data) : data)
-      writtenLen += data.length
+      writtenChunks++
       if (props.mode === 'ssh' && props.onSessionStatus) {
         // onSessionData is handled by the consumer via EventsOn if needed
       }
@@ -981,14 +978,16 @@ onActivated(() => {
   // Replay session data that arrived while deactivated BEFORE
   // setting isActive = true. The session:data handler gates on
   // isActive, so new data would race with the gap replay and
-  // advance writtenLen, making the gap undetectable.
+  // advance writtenChunks, making the gap undetectable.
+  // Uses chunk index (not byte offset) so sessionStore trimming
+  // doesn't invalidate the tracking position.
   if (props.sessionId) {
-    const full = sessionStore.getData(props.sessionId)
-    if (full.length > writtenLen) {
-      const tail = full.slice(writtenLen)
+    const total = sessionStore.getChunkCount(props.sessionId)
+    if (total > writtenChunks) {
+      const tail = sessionStore.getDataFromChunk(props.sessionId, writtenChunks)
       const hlOn = settingsStore.settings.terminal.highlightEnabled ?? true
       terminal?.write(hlOn ? highlight(tail) : tail)
-      writtenLen = full.length
+      writtenChunks = total
     }
   }
 
@@ -1044,7 +1043,7 @@ watch(() => props.sessionId, (newId, oldId) => {
   }
   // Reset write tracking when session changes so onActivated replay
   // starts from the correct offset for the new session.
-  writtenLen = 0
+  writtenChunks = 0
   if (newId && (props.mode === 'ssh' || props.mode === 'local')) {
     initZmodemService(newId)
     terminal = acquireTerminal(newId, terminalInstanceRef, getTerminalOptions())
