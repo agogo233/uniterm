@@ -1,5 +1,15 @@
 # Changelog
 
+## v2026.06.17
+
+- **bugfix** Fixed URL highlight causing all subsequent text to be underlined in the terminal.
+- **bugfix** Fixed terminal canvas blocking window edge resize by adding 3px padding to the tab area.
+- **improve** Tightened dialog padding and form item spacing; form labels now auto-expand row height when text wraps.
+- **improve** All dialogs are now draggable by default.
+- **improve** Unified select dropdown font size to 12px.
+- **improve** Update notification link now opens in the system browser instead of the built-in WebView2 window.
+- **improve** New connection button now shows "Save & Connect" consistently, same as the edit dialog.
+
 ## v2026.06.16-alpha
 
 - **bugfix** Fixed local terminal tab close causing entire app to crash. Root cause: multiple goroutines concurrently calling `ConPTY.Close()` → double `ClosePseudoConsole` on Windows triggers OS-level access violation unrecoverable by Go's `recover()`. Fix: wrap entire `Disconnect()` body in `sync.Once`.
