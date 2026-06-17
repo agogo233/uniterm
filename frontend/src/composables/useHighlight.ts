@@ -1,6 +1,7 @@
-// Full reset — lines with display attributes (reverse video, bold, etc.)
-// are skipped before highlighting, so \x1b[0m is safe here.
-const ANSI_RESET = '\x1b[0m'
+// Reset only underline (24) and foreground color (39), leaving background
+// color intact. Using \x1b[0m (full reset) would clear vim's visual selection
+// background and other SGR attributes set by terminal applications.
+const ANSI_RESET = '\x1b[24;39m'
 // Match ANSI escape sequences: CSI (ESC [ ... letter) and OSC (ESC ] ... BEL/ST)
 const ANSI_RE = /(\x1b\[[\x20-\x3F]*[\x40-\x7E]|\x1b[\]PX^_][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[\x20-\x2F][\x30-\x7E]|\x1b[\x30-\x7E])/g
 
