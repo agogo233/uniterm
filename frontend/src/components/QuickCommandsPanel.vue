@@ -61,35 +61,44 @@
         </template>
       </template>
 
-      <!-- Ungrouped commands -->
-      <template v-if="store.getCommandsByGroup(undefined).length > 0">
-        <div class="qc-group-header ungrouped">
+      <!-- Virtual (No Group) group - only when real groups exist -->
+      <template v-if="store.groups.length > 0 && store.getCommandsByGroup(undefined).filter(matchesSearch).length > 0">
+        <div
+          class="qc-group-header"
+          @click="toggleGroup('__ungrouped__')"
+        >
+          <span class="qc-group-arrow">
+            <el-icon v-if="expandedGroups.has('__ungrouped__')"><ChevronDown :size="14" /></el-icon>
+            <el-icon v-else><ChevronRight :size="14" /></el-icon>
+          </span>
           <span class="qc-group-name">{{ t('quickCommands.noGroup') }}</span>
         </div>
-        <div
-          v-for="cmd in store.getCommandsByGroup(undefined).filter(matchesSearch)"
-          :key="cmd.id"
-          class="qc-item"
-          :class="{ selected: selectedId === cmd.id }"
-          @click="selectCommand(cmd.id)"
-          @dblclick="runCommand(cmd)"
-          @contextmenu.prevent="onCommandContextMenu($event, cmd)"
-          @mouseenter="hoveredId = cmd.id"
-          @mouseleave="hoveredId = null"
-        >
-          <div class="qc-item-content">
-            <div v-if="cmd.name" class="qc-item-name">{{ cmd.name }}</div>
-            <div class="qc-item-cmd" :class="{ 'qc-item-cmd-only': !cmd.name }">{{ cmd.command }}</div>
+        <template v-if="expandedGroups.has('__ungrouped__')">
+          <div
+            v-for="cmd in store.getCommandsByGroup(undefined).filter(matchesSearch)"
+            :key="cmd.id"
+            class="qc-item"
+            :class="{ selected: selectedId === cmd.id }"
+            @click="selectCommand(cmd.id)"
+            @dblclick="runCommand(cmd)"
+            @contextmenu.prevent="onCommandContextMenu($event, cmd)"
+            @mouseenter="hoveredId = cmd.id"
+            @mouseleave="hoveredId = null"
+          >
+            <div class="qc-item-content">
+              <div v-if="cmd.name" class="qc-item-name">{{ cmd.name }}</div>
+              <div class="qc-item-cmd" :class="{ 'qc-item-cmd-only': !cmd.name }">{{ cmd.command }}</div>
+            </div>
+            <div v-if="selectedId === cmd.id || hoveredId === cmd.id" class="qc-item-actions">
+              <button class="qc-action-btn run" @click.stop="runCommand(cmd)" :title="t('quickCommands.run')">
+                <Play :size="14" />
+              </button>
+              <button class="qc-action-btn paste" @click.stop="pasteCommand(cmd)" :title="t('quickCommands.paste')">
+                <Clipboard :size="14" />
+              </button>
+            </div>
           </div>
-          <div v-if="selectedId === cmd.id || hoveredId === cmd.id" class="qc-item-actions">
-            <button class="qc-action-btn run" @click.stop="runCommand(cmd)" :title="t('quickCommands.run')">
-              <Play :size="14" />
-            </button>
-            <button class="qc-action-btn paste" @click.stop="pasteCommand(cmd)" :title="t('quickCommands.paste')">
-              <Clipboard :size="14" />
-            </button>
-          </div>
-        </div>
+        </template>
       </template>
 
       <!-- Empty state -->
@@ -204,6 +213,7 @@ const editingCmdGroupId = ref<string | undefined>(undefined)
 onMounted(async () => {
   await store.load()
   store.groups.forEach(g => expandedGroups.value.add(g.id))
+  expandedGroups.value.add('__ungrouped__')
   document.addEventListener('click', closeContextMenus)
 })
 
@@ -396,11 +406,6 @@ function doDeleteGroup(deleteCommands: boolean) {
 
 .qc-group-header:hover {
   background: var(--bg-hover);
-}
-
-.qc-group-header.ungrouped {
-  color: var(--text-muted);
-  font-weight: 500;
 }
 
 .qc-group-arrow {
