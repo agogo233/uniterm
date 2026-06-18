@@ -1308,7 +1308,20 @@ const menu = useTerminalMenu({
   getSelection,
   onPaste: async (text) => {
     if (props.mode === 'ssh' || props.mode === 'local') {
-      await pasteToSession(text)
+      if (props.broadcastActive && props.workspaceId) {
+        const tab = tabStore.tabs.find(t => t.id === props.workspaceId)
+        if (tab && tab.type === 'workspace') {
+          const filtered = filterTerminalInput(text, false)
+          for (const pid of tab.panelIds) {
+            const p = panelStore.getPanel(pid)
+            if (p?.sessionId && (p.type === 'ssh' || p.type === 'local')) {
+              SessionWrite(p.sessionId, filtered)
+            }
+          }
+        }
+      } else {
+        await pasteToSession(text)
+      }
     } else {
       pasteToTerminal(text)
     }
