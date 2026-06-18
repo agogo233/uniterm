@@ -22,15 +22,19 @@
       <template v-for="group in store.groups" :key="group.id">
         <div
           class="qc-group-header"
+          :class="{ 'drag-over': dragOverGroupId === group.id }"
           @click="toggleGroup(group.id)"
           @contextmenu.prevent="onGroupContextMenu($event, group)"
+          @dragover.prevent="onGroupDragOver($event, group.id)"
+          @dragleave="onGroupDragLeave(group.id)"
+          @drop.prevent="onGroupDrop(group.id, $event)"
         >
           <span class="qc-group-arrow">
             <el-icon v-if="expandedGroups.has(group.id)"><ChevronDown :size="14" /></el-icon>
             <el-icon v-else><ChevronRight :size="14" /></el-icon>
           </span>
           <span class="qc-group-name">{{ group.name }}</span>
-          <span class="qc-group-count">({{ getGroupCommandCount(group.id) }})</span>
+
         </div>
 
         <template v-if="expandedGroups.has(group.id)">
@@ -39,6 +43,8 @@
             :key="cmd.id"
             class="qc-item indented"
             :class="{ active: selectedId === cmd.id }"
+            draggable="true"
+            @dragstart="onCommandDragStart($event, cmd)"
             @click="selectCommand(cmd.id)"
             @dblclick="runCommand(cmd)"
             @contextmenu.prevent="onCommandContextMenu($event, cmd)"
@@ -68,6 +74,8 @@
           :key="cmd.id"
           class="qc-item"
           :class="{ active: selectedId === cmd.id }"
+          draggable="true"
+          @dragstart="onCommandDragStart($event, cmd)"
           @click="selectCommand(cmd.id)"
           @dblclick="runCommand(cmd)"
           @contextmenu.prevent="onCommandContextMenu($event, cmd)"
@@ -93,7 +101,11 @@
       <template v-if="store.groups.length > 0 && store.getCommandsByGroup(undefined).filter(matchesSearch).length > 0">
         <div
           class="qc-group-header"
+          :class="{ 'drag-over': dragOverGroupId === '__ungrouped__' }"
           @click="toggleGroup('__ungrouped__')"
+          @dragover.prevent="onGroupDragOver($event, '__ungrouped__')"
+          @dragleave="onGroupDragLeave('__ungrouped__')"
+          @drop.prevent="onGroupDrop('__ungrouped__', $event)"
         >
           <span class="qc-group-arrow">
             <el-icon v-if="expandedGroups.has('__ungrouped__')"><ChevronDown :size="14" /></el-icon>
@@ -107,6 +119,8 @@
             :key="cmd.id"
             class="qc-item indented"
             :class="{ active: selectedId === cmd.id }"
+            draggable="true"
+            @dragstart="onCommandDragStart($event, cmd)"
             @click="selectCommand(cmd.id)"
             @dblclick="runCommand(cmd)"
             @contextmenu.prevent="onCommandContextMenu($event, cmd)"
@@ -200,7 +214,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import {
   FolderPlus, Plus, Play, Clipboard,
   ChevronDown, ChevronRight
@@ -223,6 +237,8 @@ const listRef = ref<HTMLDivElement | null>(null)
 const hoveredId = ref<string | null>(null)
 const searchQuery = ref('')
 const expandedGroups = ref<Set<string>>(new Set())
+
+const dragOverGroupId = ref<string | null>(null)
 
 const cmdContextMenu = ref<{ visible: boolean; x: number; y: number; cmd: QuickCommand | null }>({ visible: false, x: 0, y: 0, cmd: null })
 const groupContextMenu = ref<{ visible: boolean; x: number; y: number; group: QuickCommandGroup | null }>({ visible: false, x: 0, y: 0, group: null })
@@ -259,10 +275,6 @@ function closeContextMenus() {
 function toggleGroup(id: string) {
   if (expandedGroups.value.has(id)) expandedGroups.value.delete(id)
   else expandedGroups.value.add(id)
-}
-
-function getGroupCommandCount(groupId: string): number {
-  return store.getCommandsByGroup(groupId).length
 }
 
 function matchesSearch(cmd: QuickCommand): boolean {
@@ -427,6 +439,53 @@ function doDeleteGroup(deleteCommands: boolean) {
   deleteGroupDialogVisible.value = false
   deletingGroup.value = null
 }
+
+// Drag and drop
+function onCommandDragStart(e: DragEvent, cmd: QuickCommand) {
+  if (!e.dataTransfer) return
+  e.dataTransfer.setData('application/qc-id', cmd.id)
+  e.dataTransfer.effectAllowed = 'move'
+}
+
+function onGroupDragOver(e: DragEvent, groupId: string) {
+  e.preventDefault()
+  if (e.dataTransfer) e.dataTransfer.dropEffect = 'move'
+  dragOverGroupId.value = groupId
+}
+
+function onGroupDragLeave(groupId: string) {
+  if (dragOverGroupId.value === groupId) {
+    dragOverGroupId.value = null
+  }
+}
+
+async function onGroupDrop(groupId: string, e: DragEvent) {
+  e.preventDefault()
+  dragOverGroupId.value = null
+  const cmdId = e.dataTransfer?.getData('application/qc-id')
+  if (!cmdId) return
+  const targetGroupId = groupId === '__ungrouped__' ? undefined : groupId
+  const cmd = store.commands.find(c => c.id === cmdId)
+  if (cmd) {
+    store.updateCommand(cmd.id, cmd.name, cmd.command, targetGroupId)
+  }
+}
+
+// Search: expand all groups and auto-select first match
+watch(searchQuery, (q) => {
+  if (q.trim()) {
+    store.groups.forEach(g => expandedGroups.value.add(g.id))
+    expandedGroups.value.add('__ungrouped__')
+  }
+  const ids = getAllVisibleIds()
+  if (ids.length > 0) {
+    focusedId.value = ids[0]
+    selectedId.value = ids[0]
+  } else {
+    focusedId.value = null
+    selectedId.value = null
+  }
+})
 </script>
 
 <style scoped>
@@ -494,6 +553,11 @@ function doDeleteGroup(deleteCommands: boolean) {
   background: var(--bg-hover);
 }
 
+.qc-group-header.drag-over {
+  background: var(--accent-subtle);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
 .qc-group-arrow {
   display: inline-flex;
   align-items: center;
@@ -506,10 +570,6 @@ function doDeleteGroup(deleteCommands: boolean) {
   flex: 1;
 }
 
-.qc-group-count {
-  color: var(--text-muted);
-  font-weight: 400;
-}
 
 .qc-item {
   display: flex;

@@ -92,9 +92,9 @@ function handleSave() {
     return
   }
   if (props.editingId) {
-    store.updateCommand(props.editingId, formName.value || undefined, cmd, formGroupId.value)
+    store.updateCommand(props.editingId, formName.value || undefined, cmd, formGroupId.value || undefined)
   } else {
-    store.addCommand(formName.value || undefined, cmd, formGroupId.value)
+    store.addCommand(formName.value || undefined, cmd, formGroupId.value || undefined)
   }
   visible.value = false
   resetForm()
