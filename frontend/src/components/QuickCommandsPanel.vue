@@ -1,23 +1,19 @@
 <template>
   <div class="quick-commands-panel">
-    <!-- Search box -->
-    <div class="qc-search-box">
+    <!-- Toolbar: search + actions -->
+    <div class="qc-toolbar">
       <el-input
         v-model="searchQuery"
         :placeholder="t('quickCommands.searchPlaceholder')"
         clearable
         size="small"
+        class="qc-search-input"
       />
-    </div>
-    <!-- Action bar -->
-    <div class="qc-action-bar">
-      <button class="qc-action-btn-text" @click="addGroup">
-        <FolderPlus :size="14" />
-        <span>{{ t('quickCommands.addGroup') }}</span>
+      <button class="qc-icon-btn" @click="addGroup" :title="t('quickCommands.addGroup')">
+        <FolderPlus :size="15" />
       </button>
-      <button class="qc-action-btn-text" @click="addCommand()">
-        <Plus :size="14" />
-        <span>{{ t('quickCommands.addCommand') }}</span>
+      <button class="qc-icon-btn" @click="addCommand()" :title="t('quickCommands.addCommand')">
+        <Plus :size="15" />
       </button>
     </div>
 
@@ -342,33 +338,35 @@ function doDeleteGroup(deleteCommands: boolean) {
   overflow: hidden;
 }
 
-.qc-search-box {
-  padding: 0 10px 8px;
-  flex-shrink: 0;
-}
-
-.qc-action-bar {
+.qc-toolbar {
   display: flex;
-  gap: 2px;
+  align-items: center;
+  gap: 4px;
   padding: 0 10px 6px;
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-color);
 }
 
-.qc-action-btn-text {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  font-size: 11px;
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.qc-search-input {
+  flex: 1;
+  min-width: 0;
 }
 
-.qc-action-btn-text:hover {
+.qc-icon-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.qc-icon-btn:hover {
   color: var(--text-primary);
   background: var(--bg-hover);
 }
@@ -376,18 +374,20 @@ function doDeleteGroup(deleteCommands: boolean) {
 .qc-list {
   flex: 1;
   overflow-y: auto;
-  padding: 4px 0;
+  padding: 0 8px 8px;
 }
 
 .qc-group-header {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 12px;
+  padding: 6px 10px 6px 6px;
   cursor: pointer;
   user-select: none;
+  border-radius: var(--radius-sm);
+  transition: background 0.12s ease;
+  font-family: var(--font-ui);
   font-size: 12px;
-  font-weight: 600;
   color: var(--text-secondary);
 }
 
@@ -406,6 +406,7 @@ function doDeleteGroup(deleteCommands: boolean) {
 }
 
 .qc-group-name {
+  font-weight: 600;
   flex: 1;
 }
 
@@ -417,10 +418,13 @@ function doDeleteGroup(deleteCommands: boolean) {
 .qc-item {
   display: flex;
   align-items: center;
-  padding: 4px 12px 4px 28px;
+  gap: 10px;
+  padding: 8px 10px 8px 26px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  gap: 4px;
-  min-height: 36px;
+  transition: all 0.12s ease;
+  margin-bottom: 2px;
+  user-select: none;
 }
 
 .qc-item:hover {
