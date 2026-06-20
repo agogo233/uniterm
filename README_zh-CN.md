@@ -42,11 +42,13 @@
 
 本地终端、SSH / Telnet / Mosh、SFTP / FTP、服务器监控、RDP / VNC / SPICE、数据库 —— 覆盖所有远程访问场景。
 
-- **终端（SSH / Telnet / Mosh / 本地终端）** — 支持密码或私钥认证连接远程服务器。支持 SSH、Telnet、Mosh（低延迟移动网络连接）。同时支持 PowerShell、CMD、Git Bash 等常见 Shell 的本地终端，与 SSH 会话共享字体、配色和操作设置。
-- **文件传输（SFTP / FTP / Zmodem）** — 双栏并排浏览本地与远程文件。支持 SFTP（基于 SSH）和 FTP/FTPS（显式 TLS），被动/主动模式、字符编码可配置。支持上传、下载、拖拽、删除、重命名等操作，传输任务按标签页独立跟踪，可暂停、继续或取消。SFTP 支持最大并发传输数限制。SSH 终端内支持 Zmodem 协议（`rz`/`sz`），拖拽文件即可上传。
-- **远程桌面（RDP / VNC / SPICE）** — 支持 Windows 远程桌面、VNC 和 SPICE 连接。
-- **数据库客户端** — 连接 MySQL、PostgreSQL、rqlite 数据库，支持 SQL 查询执行、表结构浏览、数据行在线编辑，统一界面管理全部数据源。
-- **SSH 隧道（端口转发）** — 任何连接可选择已有 SSH 连接作为跳板，自动分配本地端口通过隧道访问目标，支持所有 TCP 协议连接类型。
+- **远程终端** — 支持 SSH / Telnet / Mosh。支持密码或私钥认证连接远程服务器，其中 SSH、Telnet、Mosh 分别适用于常规远程、老旧/嵌入式设备、高延迟移动网络场景。
+- **本地终端** — 支持 PowerShell / CMD / Git Bash / WSL。与 SSH 会话共享字体、配色和操作设置。
+- **串口终端** — 扫描可用串口并配置波特率、数据位、停止位、校验位后连接，支持本地回显和 CR→CRLF 换行规范化。
+- **文件传输** — 支持 SFTP / FTP / FTPS / Zmodem。双栏并排浏览本地与远程文件。SFTP 基于 SSH，FTP/FTPS 支持显式 TLS、被动/主动模式、字符编码可配置。支持上传、下载、拖拽、删除、重命名等操作，传输任务按标签页独立跟踪，可暂停、继续或取消。SFTP 支持最大并发传输数限制。SSH 终端内支持 Zmodem 协议（`rz`/`sz`），拖拽文件即可上传。
+- **远程桌面** — 支持 RDP / VNC / SPICE。可连接 Windows 远程桌面、VNC 和 SPICE。
+- **数据库客户端** — 连接 MySQL / PostgreSQL / rqlite 数据库，支持 SQL 查询执行、表结构浏览、数据行在线编辑，统一界面管理全部数据源。
+- **SSH 隧道** — 端口转发。任何连接可选择已有 SSH 连接作为跳板，自动分配本地端口通过隧道访问目标，支持所有 TCP 协议连接类型。
 - **服务器监控** — 实时监看已连接服务器的运行状态。支持性能指标（CPU、内存、磁盘、网络）、进程列表及详情、监听端口、磁盘用量与挂载信息、网卡列表及 bond/bridge 识别。
 
 | 类别 | 协议 | 说明 |
@@ -54,7 +56,9 @@
 | 终端 | SSH | 远程服务器命令行管理 |
 | 终端 | Telnet | 老旧设备、嵌入式系统的远程终端 |
 | 终端 | Mosh | 高延迟、断续网络下的服务器连接 |
-| 终端 | Local | PowerShell、CMD、Git Bash、Zsh 等本地 Shell |
+| 终端 | Serial | 串口终端连接，支持波特率等参数配置 |
+| 终端 | Local | PowerShell、CMD、Git Bash 等本地 Shell |
+| 终端 | WSL | 通过本地终端打开已安装的 WSL 发行版 |
 | 文件传输 | SFTP | 服务器文件管理与传输 |
 | 文件传输 | FTP / FTPS | 网站空间、NAS 文件传输 |
 | 文件传输 | Zmodem | SSH 终端内 rz/sz 命令传输文件 |

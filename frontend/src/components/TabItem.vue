@@ -80,7 +80,7 @@ import { usePanelStore } from '../stores/panelStore'
 import { useI18n } from '../i18n'
 import { CreateSession } from '../../wailsjs/go/main/App'
 import type { TerminalTab, SettingsTab, SFTPTab, RDPTab, VNCTab, SPICETab, DBTab, MonitorTab, WorkspaceTab } from '../types/workspace'
-import { SquareTerminal, Laptop, FolderUp, Monitor, MonitorCloud, Settings, Sparkles, Database, Activity, X, ArrowDownUp, LayoutDashboard } from '@lucide/vue'
+import { SquareTerminal, Laptop, FolderUp, Monitor, MonitorCloud, Settings, Sparkles, Database, Activity, X, ArrowDownUp, LayoutDashboard, Cable } from '@lucide/vue'
 
 const props = defineProps<{
   tab: TerminalTab | SettingsTab | SFTPTab | RDPTab | VNCTab | SPICETab | DBTab | MonitorTab | WorkspaceTab
@@ -118,6 +118,7 @@ const tabIcon = computed(() => {
   if (t.type === 'terminal') {
     const panel = panelStore.getPanel(t.panelId)
     if (panel?.type === 'local') return Laptop
+    if (panel?.type === 'serial') return Cable
     return SquareTerminal
   }
   return null

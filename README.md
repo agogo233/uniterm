@@ -42,11 +42,13 @@ Autonomous AI Agent that works like Claude Code — independently plans and exec
 
 Local terminal, SSH / Telnet / Mosh, file transfer (SFTP / FTP), RDP / VNC / SPICE, database, SSH tunnel, server monitor — covering all remote access needs.
 
-- **Terminal (SSH / Telnet / Mosh / Local)** — Connect via password or private key authentication. Supports SSH, Telnet, and Mosh (low-latency mobile connections). Also supports local terminals (PowerShell, CMD, Git Bash) with the same font, color, and behavior settings as SSH sessions.
-- **File Transfer (SFTP / FTP / Zmodem)** — Dual-pane browser for local and remote files. Supports SFTP (over SSH) and FTP/FTPS (explicit TLS) with configurable passive/active mode and character encoding. Upload, download, drag-and-drop, delete, rename, and more. Transfers tracked per tab with pause, resume, and cancel. SFTP supports max concurrent transfer limit. Zmodem protocol (`rz`/`sz`) supported in SSH terminals, drag-and-drop to upload.
-- **Remote Desktop (RDP / VNC / SPICE)** — Support Windows Remote Desktop, VNC, and SPICE connections.
+- **Remote Terminal** — Supports SSH / Telnet / Mosh. Connect via password or private key authentication; SSH for general remote access, Telnet for legacy/embedded devices, and Mosh for high-latency mobile networks.
+- **Local Terminal** — Supports PowerShell / CMD / Git Bash / WSL. Local shells share the same font, color, and behavior settings as SSH sessions.
+- **Serial Terminal** — Scan available serial ports and connect with configurable baud rate, data bits, stop bits, and parity. Supports local echo and CR→CRLF normalization.
+- **File Transfer** — Supports SFTP / FTP / FTPS / Zmodem. Dual-pane browser for local and remote files. SFTP over SSH; FTP/FTPS with explicit TLS, configurable passive/active mode, and character encoding. Upload, download, drag-and-drop, delete, rename, and more. Transfers tracked per tab with pause, resume, and cancel. SFTP supports max concurrent transfer limit. Zmodem protocol (`rz`/`sz`) supported in SSH terminals, drag-and-drop to upload.
+- **Remote Desktop** — Supports RDP / VNC / SPICE. Connect to Windows Remote Desktop, VNC, and SPICE.
 - **Database Client** — Connect to MySQL, PostgreSQL, and rqlite databases. Execute SQL queries, browse table structures, and edit data rows inline — all from a unified interface.
-- **SSH Tunnel (Port Forwarding)** — Any connection can use an existing SSH connection as a jump host. Auto-assigns local port, tunnels TCP through SSH to the target. Supports all TCP protocol connection types.
+- **SSH Tunnel** — Port forwarding. Any connection can use an existing SSH connection as a jump host. Auto-assigns local port, tunnels TCP through SSH to the target. Supports all TCP protocol connection types.
 - **Server Monitor** — Real-time monitoring for connected servers. View performance metrics (CPU, memory, disk, network), process list with detail panel, listening ports, disk usage with mountpoint info, and network interfaces with bond/bridge detection.
 
 | Category | Protocol | Description |
@@ -54,7 +56,9 @@ Local terminal, SSH / Telnet / Mosh, file transfer (SFTP / FTP), RDP / VNC / SPI
 | Terminal | SSH | Remote server shell management |
 | Terminal | Telnet | Remote terminal for legacy devices and embedded systems |
 | Terminal | Mosh | Server connections over high-latency or intermittent networks |
-| Terminal | Local | PowerShell, CMD, Git Bash, Zsh, and other local shells |
+| Terminal | Serial | Serial port terminal with configurable baud rate and other parameters |
+| Terminal | Local | PowerShell, CMD, Git Bash, and other local shells |
+| Terminal | WSL | Open installed WSL distributions via local terminal |
 | File Transfer | SFTP | Server file management and transfer |
 | File Transfer | FTP / FTPS | Website hosting, NAS file transfer |
 | File Transfer | Zmodem | In-terminal file transfer via rz/sz commands |

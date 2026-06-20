@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.0
+
+- **new** Added serial port terminal connection. Supports scanning available serial ports and connecting with configurable baud rate, data bits, stop bits, and parity.
+- **new** Added WSL support to local terminal. The `New Local Terminal` sidebar menu now scans and lists installed WSL distributions (e.g. `WSL - Ubuntu`), which can be opened with one click.
+- **new** Added Windows portable zip artifact to the build workflow.
+
 ## v1.0.1
 
 - **new** Quick Commands management. Sidebar panel with drag-drop groups, search filtering, keyboard navigation (arrow keys + Enter), edit dialog, and full 9-language i18n support.

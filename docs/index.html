@@ -568,25 +568,35 @@ var _hmt = _hmt || [];
         <span class="content-en">Full-Featured Terminal</span>
       </h3>
       <p class="feature-group-desc">
-        <span class="content-zh">本地终端、SSH / Telnet / Mosh、文件传输（SFTP / FTP / Zmodem）、RDP / VNC / SPICE、数据库、SSH 隧道、服务器监控 —— 覆盖所有远程访问场景。</span>
-        <span class="content-en">Local terminal, SSH / Telnet / Mosh, file transfer (SFTP / FTP / Zmodem), RDP / VNC / SPICE, database, SSH tunnel, server monitor — covering all remote access needs.</span>
+        <span class="content-zh">远程终端（SSH / Telnet / Mosh）、本地终端（PowerShell / CMD / Git Bash / WSL）、串口终端、文件传输、远程桌面、数据库、SSH 隧道、服务器监控 —— 覆盖所有远程访问场景。</span>
+        <span class="content-en">Remote terminal (SSH / Telnet / Mosh), local terminal (PowerShell / CMD / Git Bash / WSL), serial terminal, file transfer, remote desktop, database, SSH tunnel, server monitor — covering all remote access needs.</span>
       </p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg></div>
-        <h4><span class="content-zh">终端（SSH / Telnet / Mosh / 本地终端）</span><span class="content-en">Terminal (SSH / Telnet / Mosh / Local)</span></h4>
-        <p><span class="content-zh">密码/私钥认证、Telnet、Mosh 低延迟，多标签页。同时支持本地 PowerShell、CMD、Git Bash、Zsh</span><span class="content-en">Password &amp; key auth, Telnet, Mosh low-latency, multi-tab. Also supports local PowerShell, CMD, Git Bash, Zsh</span></p>
+        <h4><span class="content-zh">远程终端</span><span class="content-en">Remote Terminal</span></h4>
+        <p><span class="content-zh">支持 SSH / Telnet / Mosh。密码/私钥认证，多标签页，满足常规远程、老旧设备及高延迟移动网络场景</span><span class="content-en">Supports SSH / Telnet / Mosh. Password &amp; key auth, multi-tab, for general remote, legacy devices, and high-latency mobile networks</span></p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="10" rx="2"/><path d="M2 18h20v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2z"/></svg></div>
+        <h4><span class="content-zh">本地终端</span><span class="content-en">Local Terminal</span></h4>
+        <p><span class="content-zh">支持 PowerShell / CMD / Git Bash / WSL，与 SSH 会话共享字体、配色和操作设置</span><span class="content-en">Supports PowerShell / CMD / Git Bash / WSL, sharing font, color, and behavior settings with SSH sessions</span></p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17h6M4 12h6M4 7h6M14 5h6v14h-6z"/></svg></div>
+        <h4><span class="content-zh">串口终端</span><span class="content-en">Serial Terminal</span></h4>
+        <p><span class="content-zh">扫描可用串口，配置波特率、数据位、停止位、校验位后连接</span><span class="content-en">Scan available serial ports and connect with configurable baud rate, data bits, stop bits, and parity</span></p>
       </div>
       <div class="feature-card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
-        <h4><span class="content-zh">文件传输（SFTP / FTP / Zmodem）</span><span class="content-en">File Transfer (SFTP / FTP / Zmodem)</span></h4>
-        <p><span class="content-zh">双栏浏览、上传下载拖拽，SFTP + FTP/FTPS，传输按标签页跟踪，SSH 终端内 rz/sz 传输</span><span class="content-en">Dual-pane browse, upload, download, drag-and-drop. SFTP + FTP/FTPS, per-tab transfer tracking, Zmodem in SSH terminal</span></p>
+        <h4><span class="content-zh">文件传输</span><span class="content-en">File Transfer</span></h4>
+        <p><span class="content-zh">支持 SFTP / FTP / FTPS / Zmodem。双栏浏览、上传下载拖拽，传输按标签页跟踪</span><span class="content-en">Supports SFTP / FTP / FTPS / Zmodem. Dual-pane browse, upload, download, drag-and-drop, per-tab transfer tracking</span></p>
       </div>
       <div class="feature-card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-        <h4><span class="content-zh">远程桌面（RDP / VNC / SPICE）</span><span class="content-en">Remote Desktop (RDP / VNC / SPICE)</span></h4>
-        <p><span class="content-zh">Windows 远程桌面（仅 Windows 客户端）、Linux 服务器 VNC、KVM/QEMU SPICE</span><span class="content-en">Windows RDP (Windows client only), Linux server VNC, KVM/QEMU SPICE</span></p>
+        <h4><span class="content-zh">远程桌面</span><span class="content-en">Remote Desktop</span></h4>
+        <p><span class="content-zh">支持 RDP / VNC / SPICE。Windows 远程桌面、Linux 服务器 VNC、KVM/QEMU SPICE</span><span class="content-en">Supports RDP / VNC / SPICE. Windows RDP, Linux server VNC, KVM/QEMU SPICE</span></p>
       </div>
       <div class="feature-card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
