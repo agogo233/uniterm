@@ -197,6 +197,8 @@
   "settings.autoCheckUpdate": "更新を自動確認",
   "settings.openRelease": "詳細を見る",
   "settings.checkUpdateFailed": "更新確認に失敗しました",
+  "settings.github": "GitHub",
+  "settings.homepage": "ホームページ",
   "settings.theme": "テーマ",
   "settings.themeDark": "ダーク",
   "settings.themeDeepBlue": "ディープブルー",

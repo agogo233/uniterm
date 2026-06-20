@@ -197,6 +197,8 @@
   "settings.autoCheckUpdate": "Автоматически проверять обновления",
   "settings.openRelease": "Подробнее",
   "settings.checkUpdateFailed": "Не удалось проверить обновления",
+  "settings.github": "GitHub",
+  "settings.homepage": "Веб-сайт",
   "settings.theme": "Тема",
   "settings.themeDark": "Темная",
   "settings.themeDeepBlue": "Глубокий синий",

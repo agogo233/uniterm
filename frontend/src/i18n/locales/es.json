@@ -197,6 +197,8 @@
   "settings.autoCheckUpdate": "Buscar actualizaciones automáticamente",
   "settings.openRelease": "Ver detalles",
   "settings.checkUpdateFailed": "Error al buscar actualizaciones",
+  "settings.github": "GitHub",
+  "settings.homepage": "Página web",
   "settings.theme": "Tema",
   "settings.themeDark": "Oscuro",
   "settings.themeDeepBlue": "Azul Profundo",
