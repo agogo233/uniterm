@@ -181,6 +181,16 @@ uniTerm/
 
 欢迎通过 [GitHub Issues](https://github.com/ys-ll/uniterm/issues) 提交问题、建议或使用反馈。
 
+## Star 趋势
+
+<a href="https://star-history.com/#ys-ll/uniterm&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ys-ll/uniterm&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ys-ll/uniterm&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ys-ll/uniterm&type=Date" />
+  </picture>
+</a>
+
 ## 开源协议
 
 Apache 2.0
